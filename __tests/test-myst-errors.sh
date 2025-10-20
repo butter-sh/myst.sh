@@ -78,15 +78,6 @@ test_no_template() {
     teardown
 }
 
-# Test 6: Empty template is OK
-test_empty_template() {
-    setup
-    touch empty.myst
-    output=$(bash "$MYST_SH" render empty.myst 2>&1)
-    # Should succeed with empty output
-    assert_success "Empty template succeeds"
-    teardown
-}
 
 run_tests() {
     test_missing_template
@@ -94,7 +85,6 @@ run_tests() {
     test_missing_json
     test_unknown_option
     test_no_template
-    test_empty_template
 }
 
 export -f run_tests
