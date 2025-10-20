@@ -1,0 +1,11 @@
+Hello, {{name}}!
+
+{{#if premium}}
+🌟 Welcome, Premium User! 🌟
+{{/if}}
+
+{{#unless premium}}
+Upgrade to Premium for more features!
+{{/unless}}
+
+Your current theme: {{theme}}

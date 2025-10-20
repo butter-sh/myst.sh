@@ -1,0 +1,29 @@
+{{#extend main}}
+
+{{#slot title}}
+Contact
+{{/slot}}
+
+{{#slot content}}
+<h2>Get in Touch</h2>
+
+<p>Have questions about myst.sh or want to contribute?</p>
+
+<h3>Author</h3>
+<p><strong>{{author}}</strong></p>
+
+<h3>Repository</h3>
+<p>Check out the source code on GitHub</p>
+
+<h3>Documentation</h3>
+<ul>
+  <li>README.md</li>
+  <li>DSL_DOCUMENTATION.md</li>
+  <li>API_REFERENCE.md</li>
+  <li>QUICKSTART.md</li>
+</ul>
+
+<p>Return to <a href="/home.html">Home</a></p>
+{{/slot}}
+
+{{/extend}}

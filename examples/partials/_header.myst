@@ -1,0 +1,4 @@
+<header style="background: #0066cc; color: white; padding: 15px;">
+  <h1 style="margin: 0;">{{site_name}}</h1>
+  {{> _nav}}
+</header>

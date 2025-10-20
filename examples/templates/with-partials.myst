@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{title}}</title>
+</head>
+<body>
+  {{> _header}}
+  
+  <main style="padding: 20px;">
+    <h2>{{page_title}}</h2>
+    <p>{{description}}</p>
+  </main>
+  
+  {{> _footer}}
+</body>
+</html>

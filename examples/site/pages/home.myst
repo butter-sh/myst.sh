@@ -1,0 +1,23 @@
+{{#extend main}}
+
+{{#slot title}}
+Home
+{{/slot}}
+
+{{#slot content}}
+<h2>Welcome to {{site_name}}!</h2>
+
+<p>This is a demonstration of the myst.sh templating engine being used to build a static website.</p>
+
+<h3>Features</h3>
+<ul>
+  <li>Template inheritance with layouts</li>
+  <li>Reusable partials</li>
+  <li>Variable interpolation from JSON</li>
+  <li>Easy to use and extend</li>
+</ul>
+
+<p>Check out the <a href="/about.html">About</a> page to learn more!</p>
+{{/slot}}
+
+{{/extend}}

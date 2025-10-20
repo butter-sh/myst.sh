@@ -1,0 +1,25 @@
+{{#extend main}}
+
+{{#slot title}}
+About
+{{/slot}}
+
+{{#slot content}}
+<h2>About {{site_name}}</h2>
+
+<p>{{description}}</p>
+
+<h3>About the Author</h3>
+<p>This site was created by {{author}} to demonstrate the capabilities of the myst.sh templating engine.</p>
+
+<h3>Technology Stack</h3>
+<ul>
+  <li><strong>Template Engine:</strong> myst.sh</li>
+  <li><strong>Language:</strong> Pure Bash</li>
+  <li><strong>Features:</strong> Mustache-style templates, inheritance, partials</li>
+</ul>
+
+<p>Visit the <a href="/contact.html">Contact</a> page to get in touch!</p>
+{{/slot}}
+
+{{/extend}}

@@ -1,0 +1,32 @@
+{{#extend layout}}
+
+{{#slot title}}
+{{page_title}} - {{site_name}}
+{{/slot}}
+
+{{#slot header}}
+<h1>{{site_name}}</h1>
+<p>{{tagline}}</p>
+{{/slot}}
+
+{{#slot content}}
+<article>
+  <h2>{{page_title}}</h2>
+  <p>{{content}}</p>
+  
+  {{#if show_list}}
+  <h3>Features:</h3>
+  <ul>
+  {{#each features}}
+    <li>{{this}}</li>
+  {{/each}}
+  </ul>
+  {{/if}}
+</article>
+{{/slot}}
+
+{{#slot footer}}
+<p>&copy; 2025 {{site_name}}. All rights reserved.</p>
+{{/slot}}
+
+{{/extend}}

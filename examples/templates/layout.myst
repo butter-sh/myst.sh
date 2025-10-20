@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{slot:title}}</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+    header { background: #333; color: white; padding: 20px; }
+    main { padding: 20px; }
+    footer { background: #f0f0f0; padding: 10px; text-align: center; margin-top: 20px; }
+  </style>
+  {{slot:extra_head}}
+</head>
+<body>
+  <header>
+    {{slot:header}}
+  </header>
+  
+  <main>
+    {{slot:content}}
+  </main>
+  
+  <footer>
+    {{slot:footer}}
+  </footer>
+</body>
+</html>

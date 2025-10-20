@@ -1,0 +1,13 @@
+{
+  "site_name": "Example Site",
+  "author": "Jane Doe",
+  "year": 2025,
+  "title": "Welcome",
+  "page_title": "Getting Started with myst.sh",
+  "tagline": "A powerful templating engine",
+  "content": "This is a demonstration of the myst.sh templating engine with JSON data input.",
+  "show_list": true,
+  "features": "Fast rendering,Multiple input formats,Template inheritance,Reusable partials",
+  "premium": true,
+  "theme": "dark"
+}

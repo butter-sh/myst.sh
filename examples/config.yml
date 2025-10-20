@@ -1,0 +1,8 @@
+site_name: "YAML Example Site"
+author: "John Smith"
+year: 2025
+title: "YAML Demo"
+page_title: "YAML Configuration"
+description: "This demonstrates loading data from YAML files"
+premium: false
+theme: "light"

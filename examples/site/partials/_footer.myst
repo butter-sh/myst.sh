@@ -1,0 +1,4 @@
+<footer>
+  <p>&copy; 2025 {{author}}. All rights reserved.</p>
+  <p class="meta">Built with myst.sh | Generated on {{build_date}} at {{build_time}}</p>
+</footer>
