@@ -81,27 +81,27 @@ safe_replace() {
   local output_file="$4"
 
   perl -e '
-        use strict;
-        use warnings;
+  use strict;
+  use warnings;
         
-        my $placeholder = $ARGV[0];
-        my $repl_file = $ARGV[1];
-        my $content_file = $ARGV[2];
+  my $placeholder = $ARGV[0];
+  my $repl_file = $ARGV[1];
+  my $content_file = $ARGV[2];
         
-        open(my $rfh, "<", $repl_file) or die "Cannot open $repl_file: $!";
-        local $/;
-        my $replacement = <$rfh>;
-        close($rfh);
+  open(my $rfh, "<", $repl_file) or die "Cannot open $repl_file: $!";
+  local $/;
+  my $replacement = <$rfh>;
+  close($rfh);
         
-        open(my $cfh, "<", $content_file) or die "Cannot open $content_file: $!";
-        my $content = <$cfh>;
-        close($cfh);
+  open(my $cfh, "<", $content_file) or die "Cannot open $content_file: $!";
+  my $content = <$cfh>;
+  close($cfh);
         
-        my $quoted = quotemeta($placeholder);
-        $content =~ s/$quoted/$replacement/g;
+  my $quoted = quotemeta($placeholder);
+  $content =~ s/$quoted/$replacement/g;
         
-        print $content;
-    ' "$placeholder" "$replacement_file" "$content_file" >"$output_file"
+  print $content;
+  ' "$placeholder" "$replacement_file" "$content_file" >"$output_file"
 }
 
 myst_render_vars() {
@@ -179,31 +179,31 @@ myst_render_conditionals() {
         block=""
         is_unless=false
         state="in_block"
-      elif [[ "$line" =~ ^[[:space:]]*\{\{#unless[[:space:]]+([a-zA-Z_][a-zA-Z0-9_]*)\}\}[[:space:]]*$ ]]; then
-        var_name="${BASH_REMATCH[1]}"
-        block=""
-        is_unless=true
-        state="in_block"
-      else
-        output+="$line"$'\n'
-      fi
-    elif [[ "$state" == "in_block" ]]; then
-      if [[ "$line" =~ ^[[:space:]]*\{\{/(if|unless)\}\}[[:space:]]*$ ]]; then
-        local value="${MYST_VARS[$var_name]:-}"
-        local render=false
-
-        if [[ "$is_unless" == true ]]; then
-          [[ -z "$value" || "$value" == "false" || "$value" == "0" ]] && render=true
-        else
-          [[ -n "$value" && "$value" != "false" && "$value" != "0" ]] && render=true
+        elif [[ "$line" =~ ^[[:space:]]*\{\{#unless[[:space:]]+([a-zA-Z_][a-zA-Z0-9_]*)\}\}[[:space:]]*$ ]]; then
+          var_name="${BASH_REMATCH[1]}"
+          block=""
+          is_unless=true
+          state="in_block"
+          else
+          output+="$line"$'\n'
         fi
+        elif [[ "$state" == "in_block" ]]; then
+          if [[ "$line" =~ ^[[:space:]]*\{\{/(if|unless)\}\}[[:space:]]*$ ]]; then
+            local value="${MYST_VARS[$var_name]:-}"
+            local render=false
 
-        [[ "$render" == true ]] && output+="$block"
-        state="normal"
-      else
-        block+="$line"$'\n'
-      fi
-    fi
+            if [[ "$is_unless" == true ]]; then
+              [[ -z "$value" || "$value" == "false" || "$value" == "0" ]] && render=true
+              else
+              [[ -n "$value" && "$value" != "false" && "$value" != "0" ]] && render=true
+            fi
+
+            [[ "$render" == true ]] && output+="$block"
+            state="normal"
+            else
+            block+="$line"$'\n'
+          fi
+        fi
   done <<<"$content"
 
   printf '%s' "${output%$'\n'}"
