@@ -1,4 +1,4 @@
-name: "@butter.sh/myst.sh"
+name: "myst.sh"
 version: "1.0.0"
 description: "A state-of-the-art bash templating engine with mustache-style syntax"
 author: "valknar@pivoine.art"
