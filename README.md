@@ -1,16 +1,17 @@
 <div align="center">
 
+<img src="./icon.svg" width="100" height="100" alt="myst.sh">
+
 # myst.sh
 
-**State-of-the-Art Bash Templating Engine**
+**Bash Templating Engine**
 
 [![Organization](https://img.shields.io/badge/org-butter--sh-4ade80?style=for-the-badge&logo=github&logoColor=white)](https://github.com/butter-sh)
 [![License](https://img.shields.io/badge/license-MIT-86efac?style=for-the-badge)](LICENSE)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/butter-sh/myst.sh/test.yml?branch=main&style=flat-square&logo=github&color=22c55e)](https://github.com/butter-sh/myst.sh/actions)
-[![Version](https://img.shields.io/github/v/tag/butter-sh/myst.sh?style=flat-square&label=version&color=4ade80)](https://github.com/butter-sh/myst.sh/releases)
-[![butter.sh](https://img.shields.io/badge/butter.sh-myst-22c55e?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjEgMTZWOGEyIDIgMCAwIDAtMS0xLjczbC03LTRhMiAyIDAgMCAwLTIgMGwtNyA0QTIgMiAwIDAgMCAzIDh2OGEyIDIgMCAwIDAgMSAxLjczbDcgNGEyIDIgMCAwIDAgMiAwbDctNEEyIDIgMCAwIDAgMjEgMTZ6IiBzdHJva2U9IiM0YWRlODAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBvbHlsaW5lIHBvaW50cz0iMy4yNyA2Ljk2IDEyIDEyLjAxIDIwLjczIDYuOTYiIHN0cm9rZT0iIzRhZGU4MCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48bGluZSB4MT0iMTIiIHkxPSIyMi4wOCIgeDI9IjEyIiB5Mj0iMTIiIHN0cm9rZT0iIzRhZGU4MCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=)](https://butter-sh.github.io/myst.sh)
+[![Version](https://img.shields.io/badge/version-1.0.0-22c55e?style=for-the-badge)](https://github.com/butter-sh/myst.sh/releases)
+[![butter.sh](https://img.shields.io/badge/butter.sh-myst-4ade80?style=for-the-badge)](https://butter-sh.github.io)
 
-*Mustache-style templating with inheritance, partials, and multiple input formats*
+*Advanced mustache-style templating with conditionals, loops, partials, inheritance, and multi-format input*
 
 [Documentation](https://butter-sh.github.io/myst.sh) • [GitHub](https://github.com/butter-sh/myst.sh) • [butter.sh](https://github.com/butter-sh)
 
@@ -18,27 +19,38 @@
 
 ---
 
-## Features
+## Overview
 
-**Mustache-Style Syntax** - Clean, intuitive template syntax with `.myst` file extension
+myst.sh is a state-of-the-art templating engine for bash, bringing powerful mustache-style template processing to shell scripts. With support for conditionals, loops, partials, and template inheritance, it enables sophisticated text generation from structured data.
 
-**Rich Template Features**
-- String interpolation: `{{variable}}`
-- Conditional blocks: `{{#if}}...{{/if}}`
-- Loop structures: `{{#each}}...{{/each}}`
-- Template partials/transclusion: `{{> partial}}`
-- Template inheritance with slots: `{{#extend}}...{{/extend}}`
+### Key Features
 
-**Multiple Input Formats**
-- JSON files
-- YAML files (requires `yq`)
-- Environment variables
-- Command-line arguments
-- Standard input
+- **Mustache Syntax** — Clean, intuitive template syntax with `.myst` extension
+- **Conditionals & Loops** — Full control flow with `{{#if}}` and `{{#each}}`
+- **Partials & Inheritance** — Reusable components and template layouts
+- **Multi-Format Input** — JSON, YAML, environment variables, CLI args
+- **Nested Data Access** — Dot notation for deep object traversal
+- **Embeddable** — Use as CLI or source as library
 
-**Embeddable** - Use as standalone CLI or source as library in your own scripts
+---
 
 ## Installation
+
+### Using arty.sh
+
+```bash
+arty install https://github.com/butter-sh/myst.sh.git
+arty exec myst --help
+```
+
+### Manual Installation
+
+```bash
+git clone https://github.com/butter-sh/myst.sh.git
+cd myst.sh
+sudo cp myst.sh /usr/local/bin/myst
+sudo chmod +x /usr/local/bin/myst
+```
 
 ### Using hammer.sh
 
@@ -47,176 +59,315 @@ hammer myst my-templates
 cd my-templates
 ```
 
-### Using arty.sh
+---
+
+## System Requirements
+
+- **Bash** 4.0 or higher
+- **jq** for JSON processing
+- **yq** (optional) for YAML support
+
+---
+
+## Usage
+
+### Basic Usage
 
 ```bash
-# Add to your arty.yml
-references:
-  - https://github.com/butter-sh/myst.sh.git
+# From JSON file
+myst template.myst -d data.json -o output.txt
 
-# Install dependencies
-arty deps
+# From YAML file
+myst template.myst -y config.yml -o output.txt
 
-# Use via arty
-arty exec myst render --help
+# From command-line variables
+myst template.myst -v name=John -v age=30
+
+# From environment variables
+export NAME="John"
+myst template.myst -e
+
+# From stdin
+echo '{"name": "John"}' | myst template.myst
 ```
 
-### Manual Install
+### Options
 
 ```bash
-git clone https://github.com/butter-sh/myst.sh.git
-cd myst.sh
-chmod +x setup.sh
-./setup.sh
+-d, --data FILE       Load data from JSON file
+-y, --yaml FILE       Load data from YAML file
+-v, --var KEY=VALUE   Set variable from command line
+-e, --env             Use environment variables
+-o, --output FILE     Write output to file
+-p, --partial DIR     Directory for partial templates
+-h, --help            Show help message
 ```
 
-## Dependencies
+---
 
-### Required
+## Template Syntax
 
-- `bash` 4.0+
-- `jq` - For JSON parsing
-
-### Optional
-
-- `yq` - For YAML support (https://github.com/mikefarah/yq)
-
-Install dependencies:
-
-```bash
-# Debian/Ubuntu
-sudo apt-get install jq
-
-# macOS
-brew install jq
-
-# For YAML support
-brew install yq
-# or
-sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
-sudo chmod +x /usr/bin/yq
-```
-
-## Template Syntax Reference
-
-### String Interpolation
+### Variables
 
 ```mustache
-{{variable_name}}
+Hello, {{name}}!
+Your email is {{user.email}}
 ```
-
-Simple variable substitution. Variables can be set via CLI, JSON, YAML, or environment.
 
 ### Conditionals
 
 ```mustache
-{{#if variable}}
-  Content shown if variable is truthy
+{{#if logged_in}}
+  Welcome back, {{username}}!
 {{/if}}
 
-{{#unless variable}}
-  Content shown if variable is falsy
-{{/unless}}
+{{#if admin}}
+  You have admin privileges.
+{{else}}
+  You have standard access.
+{{/if}}
 ```
-
-Variables are considered truthy if they exist, are not empty, and are not `false` or `0`.
 
 ### Loops
 
 ```mustache
-{{#each array_variable}}
-  {{this}} or {{.}}
+{{#each users}}
+  - {{name}} ({{email}})
 {{/each}}
 ```
 
-For comma-separated values: `-v items="one,two,three"`
+### Nested Data
 
-Inside loops, `{{this}}` or `{{.}}` refers to the current item.
+```mustache
+{{user.profile.firstName}} {{user.profile.lastName}}
+{{company.address.city}}, {{company.address.country}}
+```
 
 ### Partials
 
-```mustache
-{{> partial_name}}
-```
-
-Include external template file. Partial files should be named `partial_name.myst` or just `partial_name`.
-
-### Template Inheritance
-
-Layout template:
-
+**template.myst:**
 ```mustache
 <html>
-  <head>{{slot:head}}</head>
-  <body>{{slot:body}}</body>
+  {{> header}}
+  <body>
+    {{> content}}
+  </body>
+  {{> footer}}
 </html>
 ```
 
-Child template:
-
+**partials/header.myst:**
 ```mustache
-{{#extend layout_name}}
-  {{#slot head}}<title>Page Title</title>{{/slot}}
-  {{#slot body}}<h1>Content</h1>{{/slot}}
-{{/extend}}
+<head>
+  <title>{{title}}</title>
+</head>
 ```
 
-## Use Cases
+### Template Inheritance
 
-- **Static Site Generation** - Build websites from templates
-- **Configuration Management** - Generate config files from templates
-- **Documentation** - Create documentation with reusable components
-- **Email Templates** - Generate personalized emails
-- **Code Generation** - Scaffold projects and boilerplate
-- **Reports** - Create reports from data
-- **CI/CD Pipelines** - Generate deployment manifests
+**base.myst:**
+```mustache
+<!DOCTYPE html>
+<html>
+  <head>
+    {{#slot:head}}
+      <title>Default Title</title>
+    {{/slot:head}}
+  </head>
+  <body>
+    {{#slot:content}}
+      Default content
+    {{/slot:content}}
+  </body>
+</html>
+```
 
-## Integration with butter.sh
+**page.myst:**
+```mustache
+{{#extend:base}}
+  {{#fill:head}}
+    <title>{{page_title}}</title>
+  {{/fill:head}}
 
-myst.sh powers leaf.sh and is used throughout the butter.sh ecosystem:
+  {{#fill:content}}
+    <h1>{{heading}}</h1>
+    <p>{{body}}</p>
+  {{/fill:content}}
+{{/extend:base}}
+```
 
+---
+
+## Examples
+
+### Example 1: Configuration File Generation
+
+**template.myst:**
+```mustache
+server {
+  listen {{port}};
+  server_name {{domain}};
+
+  {{#if ssl}}
+  ssl_certificate {{ssl.cert}};
+  ssl_certificate_key {{ssl.key}};
+  {{/if}}
+
+  location / {
+    proxy_pass {{backend}};
+  }
+}
+```
+
+**data.json:**
+```json
+{
+  "port": 443,
+  "domain": "example.com",
+  "ssl": {
+    "cert": "/etc/ssl/cert.pem",
+    "key": "/etc/ssl/key.pem"
+  },
+  "backend": "http://localhost:3000"
+}
+```
+
+**Usage:**
 ```bash
-# Install leaf.sh (which uses myst.sh)
-arty install https://github.com/butter-sh/leaf.sh.git
-
-# leaf.sh uses myst.sh for templating
-arty exec leaf . --landing
-
-# Generate project with hammer.sh
-hammer myst my-templates
-
-# Use myst.sh directly
-arty exec myst render template.myst -j data.json
+myst template.myst -d data.json -o nginx.conf
 ```
 
-## Related Projects
+### Example 2: Email Template
 
-Part of the butter.sh ecosystem:
+**email.myst:**
+```mustache
+To: {{recipient.email}}
+Subject: {{subject}}
 
-- **[arty.sh](https://github.com/butter-sh/arty.sh)** - Bash library dependency manager
-- **[hammer.sh](https://github.com/butter-sh/hammer.sh)** - Project generator from templates
-- **[judge.sh](https://github.com/butter-sh/judge.sh)** - Testing framework with assertions
-- **[leaf.sh](https://github.com/butter-sh/leaf.sh)** - Documentation generator (uses myst.sh)
-- **[whip.sh](https://github.com/butter-sh/whip.sh)** - Release cycle management
+Hello {{recipient.name}},
+
+{{#if has_items}}
+Your order contains:
+{{#each items}}
+  - {{name}}: ${{price}}
+{{/each}}
+
+Total: ${{total}}
+{{else}}
+Your cart is empty.
+{{/if}}
+
+Thank you!
+```
+
+**Usage:**
+```bash
+myst email.myst -d order.json -o email.txt
+```
+
+### Example 3: Documentation Generation
+
+**readme.myst:**
+```mustache
+# {{project.name}}
+
+{{project.description}}
+
+## Installation
+
+\`\`\`bash
+{{install.command}}
+\`\`\`
+
+## Features
+
+{{#each features}}
+- **{{name}}** — {{description}}
+{{/each}}
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+{{license}}
+```
+
+**Usage:**
+```bash
+myst readme.myst -y project.yml -o README.md
+```
+
+---
+
+## Integration with arty.sh
+
+Add myst.sh to your project's `arty.yml`:
+
+```yaml
+name: "my-project"
+version: "1.0.0"
+
+references:
+  - https://github.com/butter-sh/myst.sh.git
+
+scripts:
+  generate: "arty exec myst templates/main.myst -d data.json"
+  docs: "arty exec myst templates/readme.myst -y config.yml -o README.md"
+```
+
+Then run:
+
+```bash
+arty deps       # Install myst.sh
+arty generate   # Generate from templates
+arty docs       # Generate documentation
+```
+
+---
+
+## Embedding in Scripts
+
+Use myst.sh as a library in your own scripts:
+
+```bash
+#!/usr/bin/env bash
+
+# Source myst.sh
+source <(arty source myst)
+
+# Use myst functions
+render_template "template.myst" "data.json" "output.txt"
+```
+
+---
+
+## Related Projects
+
+Part of the [butter.sh](https://github.com/butter-sh) ecosystem:
+
+- **[arty.sh](https://github.com/butter-sh/arty.sh)** — Dependency manager
+- **[judge.sh](https://github.com/butter-sh/judge.sh)** — Testing framework
+- **[hammer.sh](https://github.com/butter-sh/hammer.sh)** — Project scaffolding (uses myst.sh)
+- **[leaf.sh](https://github.com/butter-sh/leaf.sh)** — Documentation generator (uses myst.sh)
+- **[whip.sh](https://github.com/butter-sh/whip.sh)** — Release management
+- **[clean.sh](https://github.com/butter-sh/clean.sh)** — Linter and formatter
+
+---
+
+## License
+
+MIT License — see [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Author
-
-Created by [valknar](https://github.com/valknarogg)
-
 ---
 
 <div align="center">
 
-Part of the [butter.sh](https://github.com/butter-sh) ecosystem
+**Part of the [butter.sh](https://github.com/butter-sh) ecosystem**
 
-**Unlimited. Independent. Fresh.**
+*Unlimited. Independent. Fresh.*
+
+Crafted by [Valknar](https://github.com/valknarogg)
 
 </div>
