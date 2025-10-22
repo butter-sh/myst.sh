@@ -1,6 +1,6 @@
 <div align="center">
 
-# ✨ myst.sh
+# myst.sh
 
 **State-of-the-Art Bash Templating Engine**
 
@@ -20,23 +20,23 @@
 
 ## Features
 
-🎨 **Mustache-Style Syntax** - Clean, intuitive template syntax with `.myst` file extension
+**Mustache-Style Syntax** - Clean, intuitive template syntax with `.myst` file extension
 
-📝 **Rich Template Features**
+**Rich Template Features**
 - String interpolation: `{{variable}}`
 - Conditional blocks: `{{#if}}...{{/if}}`
 - Loop structures: `{{#each}}...{{/each}}`
 - Template partials/transclusion: `{{> partial}}`
 - Template inheritance with slots: `{{#extend}}...{{/extend}}`
 
-🔌 **Multiple Input Formats**
+**Multiple Input Formats**
 - JSON files
 - YAML files (requires `yq`)
 - Environment variables
 - Command-line arguments
 - Standard input
 
-🛠️ **Embeddable** - Use as standalone CLI or source as library in your own scripts
+**Embeddable** - Use as standalone CLI or source as library in your own scripts
 
 ## Installation
 

@@ -26,8 +26,8 @@ mkdir -p "$OUTPUT_DIR"
 
 # Load global data
 if [[ -f "$DATA_FILE" ]]; then
-    log_info "Loading site data from $DATA_FILE"
-    myst_load_json "$DATA_FILE"
+  log_info "Loading site data from $DATA_FILE"
+  myst_load_json "$DATA_FILE"
 fi
 
 # Load environment variables
@@ -41,19 +41,19 @@ myst_set_var "generator" "myst.sh static site generator"
 
 # Load all partials
 if [[ -d "$PARTIALS_DIR" ]]; then
-    log_info "Loading partials from $PARTIALS_DIR"
-    myst_load_partials_dir "$PARTIALS_DIR"
+  log_info "Loading partials from $PARTIALS_DIR"
+  myst_load_partials_dir "$PARTIALS_DIR"
 fi
 
 # Load layout
 if [[ -f "${LAYOUTS_DIR}/main.myst" ]]; then
-    log_info "Loading main layout"
-    MYST_LAYOUTS["main"]=$(cat "${LAYOUTS_DIR}/main.myst")
+  log_info "Loading main layout"
+  MYST_LAYOUTS["main"]=$(cat "${LAYOUTS_DIR}/main.myst")
 fi
 
 # Process all pages
 if [[ ! -d "$PAGES_DIR" ]]; then
-    die "Pages directory not found: $PAGES_DIR"
+  die "Pages directory not found: $PAGES_DIR"
 fi
 
 page_count=0
@@ -62,26 +62,26 @@ log_info "Processing pages..."
 echo
 
 for page_file in "$PAGES_DIR"/*.myst; do
-    if [[ ! -f "$page_file" ]]; then
-        continue
-    fi
-    
-    page_name=$(basename "$page_file" .myst)
-    output_file="${OUTPUT_DIR}/${page_name}.html"
-    
-    # Set page-specific variables
-    myst_set_var "page_name" "$page_name"
-    myst_set_var "page_url" "/${page_name}.html"
-    
-    # Load and render page
-    page_content=$(cat "$page_file")
-    rendered=$(myst_render "$page_content")
-    
-    # Save output
-    echo "$rendered" > "$output_file"
-    
-    log_success "Generated: $output_file"
-    page_count=$((page_count + 1))
+  if [[ ! -f "$page_file" ]]; then
+    continue
+  fi
+
+  page_name=$(basename "$page_file" .myst)
+  output_file="${OUTPUT_DIR}/${page_name}.html"
+
+  # Set page-specific variables
+  myst_set_var "page_name" "$page_name"
+  myst_set_var "page_url" "/${page_name}.html"
+
+  # Load and render page
+  page_content=$(cat "$page_file")
+  rendered=$(myst_render "$page_content")
+
+  # Save output
+  echo "$rendered" >"$output_file"
+
+  log_success "Generated: $output_file"
+  page_count=$((page_count + 1))
 done
 
 echo
@@ -103,11 +103,11 @@ index_content="<!DOCTYPE html>
   <ul>"
 
 for html_file in "$OUTPUT_DIR"/*.html; do
-    if [[ "$(basename "$html_file")" != "index.html" ]] && [[ -f "$html_file" ]]; then
-        name=$(basename "$html_file" .html)
-        index_content+="
+  if [[ "$(basename "$html_file")" != "index.html" ]] && [[ -f "$html_file" ]]; then
+    name=$(basename "$html_file" .html)
+    index_content+="
     <li><a href='${name}.html'>$name</a></li>"
-    fi
+  fi
 done
 
 index_content+="
@@ -117,7 +117,7 @@ index_content+="
 </body>
 </html>"
 
-echo "$index_content" > "${OUTPUT_DIR}/index.html"
+echo "$index_content" >"${OUTPUT_DIR}/index.html"
 log_success "Generated: ${OUTPUT_DIR}/index.html"
 
 echo

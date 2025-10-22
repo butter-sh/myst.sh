@@ -22,8 +22,8 @@ echo
 
 # Check if myst.sh exists
 if [[ ! -f "$MYST" ]]; then
-    echo -e "${YELLOW}Error: myst.sh not found at $MYST${NC}"
-    exit 1
+  echo -e "${YELLOW}Error: myst.sh not found at $MYST${NC}"
+  exit 1
 fi
 
 chmod +x "$MYST"
@@ -38,9 +38,9 @@ echo -e "${BLUE}Template:${NC} templates/simple.myst"
 echo -e "${BLUE}Command:${NC} myst.sh render simple.myst -v name=Alice -v premium=true -v theme=dark"
 echo
 "$MYST" render "${SCRIPT_DIR}/templates/simple.myst" \
-    -v name=Alice \
-    -v premium=true \
-    -v theme=dark
+  -v name=Alice \
+  -v premium=true \
+  -v theme=dark
 echo
 echo
 
@@ -54,8 +54,8 @@ echo -e "${BLUE}Template:${NC} templates/list.myst"
 echo -e "${BLUE}Command:${NC} myst.sh render list.myst -v items='Apples,Bananas,Oranges' -v count=3"
 echo
 "$MYST" render "${SCRIPT_DIR}/templates/list.myst" \
-    -v items="Apples,Bananas,Oranges,Grapes" \
-    -v count=4
+  -v items="Apples,Bananas,Oranges,Grapes" \
+  -v count=4
 echo
 echo
 
@@ -70,7 +70,7 @@ echo -e "${BLUE}Template:${NC} templates/simple.myst"
 echo -e "${BLUE}Command:${NC} myst.sh render simple.myst -j data.json"
 echo
 "$MYST" render "${SCRIPT_DIR}/templates/simple.myst" \
-    -j "${SCRIPT_DIR}/data.json"
+  -j "${SCRIPT_DIR}/data.json"
 echo
 echo
 
@@ -79,19 +79,19 @@ echo
 #=============================================================================
 
 if command -v yq >/dev/null 2>&1; then
-    echo -e "${GREEN}[Demo 4]${NC} YAML Data Input"
-    echo "-------------------------------------------"
-    echo -e "${BLUE}Data file:${NC} config.yml"
-    echo -e "${BLUE}Template:${NC} templates/simple.myst"
-    echo -e "${BLUE}Command:${NC} myst.sh render simple.myst -y config.yml"
-    echo
-    "$MYST" render "${SCRIPT_DIR}/templates/simple.myst" \
-        -y "${SCRIPT_DIR}/config.yml"
-    echo
-    echo
+  echo -e "${GREEN}[Demo 4]${NC} YAML Data Input"
+  echo "-------------------------------------------"
+  echo -e "${BLUE}Data file:${NC} config.yml"
+  echo -e "${BLUE}Template:${NC} templates/simple.myst"
+  echo -e "${BLUE}Command:${NC} myst.sh render simple.myst -y config.yml"
+  echo
+  "$MYST" render "${SCRIPT_DIR}/templates/simple.myst" \
+    -y "${SCRIPT_DIR}/config.yml"
+  echo
+  echo
 else
-    echo -e "${YELLOW}[Demo 4]${NC} YAML Data Input - SKIPPED (yq not installed)"
-    echo
+  echo -e "${YELLOW}[Demo 4]${NC} YAML Data Input - SKIPPED (yq not installed)"
+  echo
 fi
 
 #=============================================================================
@@ -105,8 +105,8 @@ echo -e "${BLUE}Partials:${NC} partials/_header.myst, partials/_footer.myst, par
 echo -e "${BLUE}Command:${NC} myst.sh render with-partials.myst -p partials -j data.json"
 echo
 "$MYST" render "${SCRIPT_DIR}/templates/with-partials.myst" \
-    -p "${SCRIPT_DIR}/partials" \
-    -j "${SCRIPT_DIR}/data.json"
+  -p "${SCRIPT_DIR}/partials" \
+  -j "${SCRIPT_DIR}/data.json"
 echo
 echo
 
@@ -121,8 +121,8 @@ echo -e "${BLUE}Child:${NC} templates/page.myst"
 echo -e "${BLUE}Command:${NC} myst.sh render page.myst -l layout.myst -j data.json"
 echo
 "$MYST" render "${SCRIPT_DIR}/templates/page.myst" \
-    -l "${SCRIPT_DIR}/templates/layout.myst" \
-    -j "${SCRIPT_DIR}/data.json"
+  -l "${SCRIPT_DIR}/templates/layout.myst" \
+  -j "${SCRIPT_DIR}/data.json"
 echo
 echo
 
@@ -167,10 +167,10 @@ echo -e "${BLUE}Command:${NC} Multiple sources with override precedence"
 echo
 export MYST_theme=override_theme
 "$MYST" render "${SCRIPT_DIR}/templates/simple.myst" \
-    -j "${SCRIPT_DIR}/data.json" \
-    -e \
-    -v name="Override Name" \
-    -v premium=false
+  -j "${SCRIPT_DIR}/data.json" \
+  -e \
+  -v name="Override Name" \
+  -v premium=false
 unset MYST_theme
 echo
 echo
@@ -186,17 +186,17 @@ echo
 
 OUTPUT_FILE="${SCRIPT_DIR}/../output.html"
 "$MYST" render "${SCRIPT_DIR}/templates/page.myst" \
-    -l "${SCRIPT_DIR}/templates/layout.myst" \
-    -j "${SCRIPT_DIR}/data.json" \
-    -o "$OUTPUT_FILE"
+  -l "${SCRIPT_DIR}/templates/layout.myst" \
+  -j "${SCRIPT_DIR}/data.json" \
+  -o "$OUTPUT_FILE"
 
 if [[ -f "$OUTPUT_FILE" ]]; then
-    echo -e "${GREEN}✓${NC} File created successfully: $OUTPUT_FILE"
-    echo -e "${BLUE}Preview (first 10 lines):${NC}"
-    head -10 "$OUTPUT_FILE"
-    echo "..."
+  echo -e "${GREEN}✓${NC} File created successfully: $OUTPUT_FILE"
+  echo -e "${BLUE}Preview (first 10 lines):${NC}"
+  head -10 "$OUTPUT_FILE"
+  echo "..."
 else
-    echo -e "${YELLOW}✗${NC} File creation failed"
+  echo -e "${YELLOW}✗${NC} File creation failed"
 fi
 echo
 echo

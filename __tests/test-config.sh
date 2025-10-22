@@ -9,8 +9,8 @@ export MYST_SH_ROOT="$PWD"
 
 # Test behavior flags
 export MYST_TEST_MODE=1
-export MYST_SKIP_YQ_CHECK=0  # Set to 1 to skip yq availability check in tests
-export MYST_SKIP_JQ_CHECK=0  # Set to 1 to skip jq availability check in tests
+export MYST_SKIP_YQ_CHECK=0 # Set to 1 to skip yq availability check in tests
+export MYST_SKIP_JQ_CHECK=0 # Set to 1 to skip jq availability check in tests
 
 # Color output in tests (set to 0 to disable)
 export MYST_TEST_COLORS=1
