@@ -46,8 +46,16 @@ myst_load_json() {
 
   local keys=($(jq -r 'keys[]' "$1"))
   for key in "${keys[@]}"; do
-    local value=$(jq -r ".[\"$key\"]" "$1")
-    MYST_VARS["$key"]="$value"
+    local value_type=$(jq -r ".[\"$key\"] | type" "$1")
+
+    if [[ "$value_type" == "array" ]]; then
+      # Store array as JSON for later processing
+      MYST_VARS["$key"]=$(jq -c ".[\"$key\"]" "$1")
+      MYST_VARS["${key}__type"]="array"
+      else
+      local value=$(jq -r ".[\"$key\"]" "$1")
+      MYST_VARS["$key"]="$value"
+    fi
   done
 }
 
@@ -218,7 +226,7 @@ myst_render_loops() {
 
   while IFS= read -r line; do
     if [[ "$state" == "normal" ]]; then
-      if [[ "$line" =~ ^\{\{#each[[:space:]]+([a-zA-Z_][a-zA-Z0-9_]*)\}\}$ ]]; then
+      if [[ "$line" =~ ^[[:space:]]*\{\{#each[[:space:]]+([a-zA-Z_][a-zA-Z0-9_]*)\}\}[[:space:]]*$ ]]; then
         var_name="${BASH_REMATCH[1]}"
         block=""
         state="in_loop"
@@ -226,19 +234,63 @@ myst_render_loops() {
         output+="$line"$'\n'
       fi
     elif [[ "$state" == "in_loop" ]]; then
-      if [[ "$line" =~ ^\{\{/each\}\}$ ]]; then
+      if [[ "$line" =~ ^[[:space:]]*\{\{/each\}\}[[:space:]]*$ ]]; then
         local array_value="${MYST_VARS[$var_name]:-}"
+        local array_type="${MYST_VARS[${var_name}__type]:-}"
 
         if [[ -n "$array_value" ]]; then
-          IFS=',' read -ra items <<<"$array_value"
-          for item in "${items[@]}"; do
-            item="${item#"${item%%[![:space:]]*}"}"
-            item="${item%"${item##*[![:space:]]}"}"
-            local rendered="$block"
-            rendered="${rendered//\{\{this\}\}/$item}"
-            rendered="${rendered//\{\{.\}\}/$item}"
-            output+="$rendered"
-          done
+          if [[ "$array_type" == "array" ]]; then
+            # Handle JSON array (possibly with objects)
+            local array_length=$(echo "$array_value" | jq 'length')
+            for ((i=0; i<array_length; i++)); do
+              local item_json=$(echo "$array_value" | jq -c ".[$i]")
+              local rendered="$block"
+
+              # Replace {{this}} with the whole item if it's a simple value
+              local item_type=$(echo "$item_json" | jq -r 'type')
+              if [[ "$item_type" != "object" ]]; then
+                local simple_value=$(echo "$item_json" | jq -r '.')
+                rendered="${rendered//\{\{this\}\}/$simple_value}"
+                rendered="${rendered//\{\{.\}\}/$simple_value}"
+              else
+                # Extract object properties and set as temporary variables
+                local keys=($(echo "$item_json" | jq -r 'keys[]'))
+                local old_vars=()
+                for prop in "${keys[@]}"; do
+                  local prop_value=$(echo "$item_json" | jq -r ".[\"$prop\"]")
+                  # Save old value if it exists
+                  old_vars+=("$prop:${MYST_VARS[$prop]:-}")
+                  # Set property as a variable for rendering
+                  MYST_VARS["$prop"]="$prop_value"
+                done
+                # Render variables within this iteration (so {{label}}, {{url}}, etc. get replaced)
+                rendered=$(myst_render_vars "$rendered")
+                # Restore old variable values
+                for old_var in "${old_vars[@]}"; do
+                  local var_name="${old_var%%:*}"
+                  local var_value="${old_var#*:}"
+                  if [[ -n "$var_value" ]]; then
+                    MYST_VARS["$var_name"]="$var_value"
+                  else
+                    unset MYST_VARS["$var_name"]
+                  fi
+                done
+              fi
+
+              output+="$rendered"
+            done
+          else
+            # Handle comma-separated string (original behavior)
+            IFS=',' read -ra items <<<"$array_value"
+            for item in "${items[@]}"; do
+              item="${item#"${item%%[![:space:]]*}"}"
+              item="${item%"${item##*[![:space:]]}"}"
+              local rendered="$block"
+              rendered="${rendered//\{\{this\}\}/$item}"
+              rendered="${rendered//\{\{.\}\}/$item}"
+              output+="$rendered"
+            done
+          fi
         fi
         state="normal"
       else
@@ -258,7 +310,7 @@ myst_render_partials() {
   [[ -z "$TEMP_DIR" ]] && TEMP_DIR=$(mktemp -d)
   local max_iter=100 iter=0
 
-  while [[ "$content" =~ \{\{\>[[:space:]]*([a-zA-Z_][a-zA-Z0-9_]*)\}\} ]] && ((iter < max_iter)); do
+  while [[ "$content" =~ \{\{\>[[:space:]]*([a-zA-Z_][a-zA-Z0-9_-]*)\}\} ]] && ((iter < max_iter)); do
     local name="${BASH_REMATCH[1]}"
     local partial="${MYST_PARTIALS[$name]:-}"
 
